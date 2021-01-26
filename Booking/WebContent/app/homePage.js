@@ -45,7 +45,8 @@ Vue.component("home-page", {
 		  <div v-else-if = "loggedUser.userRole==='HOST'">
 		  	<ul class="nav navbar-nav navbar-right">
 			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
-			<li><router-link to="/allHostUsers"><a>Svi korisnici</a></router-link></li>
+			<li><router-link to="/allHostUsers"><a>Korisnici</a></router-link></li>
+			<li><router-link to="/allApartments"><a>Apartmani</a></router-link></li>
             <li><a v-on:click="logout()">Logout</a></li>
           </ul>
 		  </div>

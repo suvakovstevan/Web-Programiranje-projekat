@@ -1,11 +1,7 @@
-Vue.component("all-amenities",{
+Vue.component("all-apartments",{
 	data : function(){
 		return {
-			amenities : {},
-			newAmenity : {
-				id:0,
-				name : ''
-			}
+			apartments : {},
 		}
 	},
 	
@@ -98,11 +94,8 @@ Vue.component("all-amenities",{
   <div class="right col-md-4">
     <div class="container lista">
       <h1>Amenities</h1>
-<div class="col-md-6 divider"></div> 
-	<div class="col-md-2 divider">
 <button type="input"  class="btn btn-search btn-lg" data-toggle="modal" data-target="#myModal1" >Add</button>
-    </div> 
-	<div class="right">
+      <div class="right">
         <div class="col-md-8">
           <div class="row">
             <div class="room" v-for = "amenity of amenities">
@@ -153,7 +146,7 @@ Vue.component("all-amenities",{
 				<span class="validation-error">{{ errors.first('name') }}</span>
                 </div>
 				<div class="form-group">
-                  <input type="input" class="btnSubmit" value="Add" v-on:click="addAmenity()"/>
+                  <input type="input" class="btnSubmit" value="Add"/>
                 </div>
               </form>
             </div>
@@ -168,9 +161,4 @@ Vue.component("all-amenities",{
 	mounted(){
 		axios.get('http://localhost:8080/Booking/rest/amenities/all').then((response) =>{this.amenities=response.data; console.log(this.amenities)},(error) => {console.log(error.response.data)})
 	},
-	methods : {
-		addAmenity : function(){
-			axios.post('http://localhost:8080/Booking/rest/amenities/create',this.newAmenity).then((response)=>{console.log(response.data);this.$router.go('/allAmenities')},(error)=>{console.log(error.response.data)})
-		}
-	}
 })
