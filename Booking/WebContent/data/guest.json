@@ -1,1 +1,8 @@
-[]
+[{
+	"username" : "guest",
+		"password" : "guest",
+		"firstName" : "Guest",
+		"lastName" : "Guest",
+		"gender"  : "MALE",
+		"userRole"  :"GUEST"
+}]

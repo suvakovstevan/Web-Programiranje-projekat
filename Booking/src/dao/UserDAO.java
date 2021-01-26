@@ -158,16 +158,6 @@ public class UserDAO {
 			}
 		}
 		
-		/*for(Guest g: guests) {
-			System.out.println("Guest:" + g.getUsername());
-		}
-		for(Host g: hosts) {
-			System.out.println("Host:" + g.getUsername());
-		}
-		for(Admin g: admins) {
-			System.out.println("Admin:" + g.getUsername());
-		}*/
-		
 		//upisivanje admina
 		File adminFile = new File(this.ctx + "data/admin.json");
 		

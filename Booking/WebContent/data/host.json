@@ -1,1 +1,8 @@
-[ ]
+[{
+	"username" : "host",
+		"password" : "host",
+		"firstName" : "Host",
+		"lastName" : "Host",
+		"gender"  : "MALE",
+		"userRole"  :"HOST"
+}]

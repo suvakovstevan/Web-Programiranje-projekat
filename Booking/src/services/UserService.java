@@ -69,7 +69,7 @@ public class UserService {
 			return Response.status(400).entity("No logged users!").build();
 		}
 		
-		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+		if(admin.getUserRole().equals(UserRole.ADMIN) || admin.getUserRole().equals(UserRole.HOST)) {
 			UserDAO dao = (UserDAO) this.ctx.getAttribute("userDAO");
 			return Response.status(200).entity(dao.getUsers()).build();
 		}

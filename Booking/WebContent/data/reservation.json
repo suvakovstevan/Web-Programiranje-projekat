@@ -15,10 +15,10 @@
     }
   },
   "host" : {
-    "username" : "stevo",
-    "password" : "stevo",
-    "firstName" : "Stevan",
-    "lastName" : "Suvakov",
+    "username" : "host",
+    "password" : "host",
+    "firstName" : "Host",
+    "lastName" : "Host",
     "gender" : "MALE",
     "userRole" : "HOST"
   },
@@ -39,10 +39,10 @@
   "sumPrice" : "700.0",
   "message" : "poruke",
   "guest" : {
-	"username" : "stevo",
-		"password" : "stevo",
-		"firstName" : "Stevan",
-		"lastName" : "Suvakov",
+	"username" : "guest",
+		"password" : "guest",
+		"firstName" : "Guest",
+		"lastName" : "Guest",
 		"gender"  : "MALE",
 		"userRole"  :"GUEST"
 },

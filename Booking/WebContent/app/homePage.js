@@ -38,6 +38,7 @@ Vue.component("home-page", {
 		  	<ul class="nav navbar-nav navbar-right">
 			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
 			<li><router-link to="/allUsers"><a>Svi korisnici</a></router-link></li>
+			<li><router-link to="/allAmenities"><a>Amenities</a></router-link></li>
             <li><a v-on:click="logout()">Logout</a></li>
           </ul>
 		  </div>
