@@ -1,0 +1,66 @@
+[{
+  "id" : "1",
+  "type" : "FULL",
+  "roomNumber" : "3",
+  "guestNumber" : "4",
+  "location" : {
+    "longitude" : "12.4579",
+    "latitude" : "14.1246",
+    "adress" : {
+      "street" : "Ulica",
+      "number" : "1",
+      "city" : "Grad",
+      "postalCode" : "1100"
+    }
+  },
+  "host" : {
+    "username" : "stevo",
+    "password" : "stevo",
+    "firstName" : "Stevan",
+    "lastName" : "Suvakov",
+    "gender" : "MALE",
+    "userRole" : "HOST"
+  },
+  "reservationDates" : [ ],
+  "pricePerNight" : "0.0",
+  "checkInTime" : "1588636800001",
+  "checkOutTime" : "158863680000",
+  "status" : false,
+  "amenidies" : [{
+	"id" : "1",
+	"name" : "klima"
+}],
+  "reservations" : [ ],
+  "images" : [ ]
+},{
+  "id" : "2",
+  "type" : "FULL",
+  "roomNumber" : "1",
+  "guestNumber" : "5",
+  "location" : {
+    "longitude" : "12.4579",
+    "latitude" : "14.1246",
+    "adress" : {
+      "street" : "Ulica",
+      "number" : "1",
+      "city" : "Grad",
+      "postalCode" : "1100"
+    }
+  },
+  "host" : {
+    "username" : "stevo2",
+    "password" : "stevo",
+    "firstName" : "Stevan",
+    "lastName" : "Suvakov",
+    "gender" : "MALE",
+    "userRole" : "HOST"
+  },
+  "reservationDates" : [ ],
+  "pricePerNight" : "0.0",
+  "checkInTime" : "1588636800001",
+  "checkOutTime" : "158863680000",
+  "status" : true,
+  "amenidies" : [ ],
+  "reservations" : [ ],
+  "images" : [ ]
+}]
