@@ -19,7 +19,7 @@ import beans.Amenity;
 import beans.User;
 import beans.UserRole;
 import dao.AmenityDAO;
-//import dao.ApartmentDAO;
+import dao.ApartmentDAO;
 
 @Path("/amenities")
 public class AmenityService {
@@ -35,6 +35,9 @@ public class AmenityService {
 	public void init() {
 		if(this.ctx.getAttribute("amenityDAO") == null) {
 			this.ctx.setAttribute("amenityDAO", new AmenityDAO(this.ctx.getRealPath("/")));
+		}
+		if(this.ctx.getAttribute("apartmentDAO") == null) {
+			this.ctx.setAttribute("apartmentDAO", new ApartmentDAO(this.ctx.getRealPath("/")));
 		}
 	}
 	
@@ -76,4 +79,46 @@ public class AmenityService {
 		return Response.status(403).entity("Forbidden access!").build();
 	}
 	
+	@PUT
+	@Path("modify")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response modifyAmenity(Amenity amenity, @Context HttpServletRequest request) {
+		User admin = (User) request.getSession().getAttribute("user");
+		if(admin==null) {
+			return Response.status(400).entity("No logged users!").build();	
+		}
+		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+			AmenityDAO dao = (AmenityDAO) this.ctx.getAttribute("amenityDAO");
+			ApartmentDAO apdao = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
+			apdao.editAmenityFromApartment(amenity);
+			if(dao.modifyAmenity(amenity)) {
+				dao.saveAmenities();
+				apdao.saveApartments();
+				return Response.status(200).entity("Amenity successfully modified!").build();
+			}
+			return Response.status(400).entity("Selected amenity does not exist!!").build();
+		}
+		return Response.status(403).entity("Forbidden access!").build();
+	}
+	
+	@DELETE
+	@Path("delete/{id}")
+	public Response deleteAmenity(@PathParam("id") Long id, @Context HttpServletRequest request) {
+		User admin = (User) request.getSession().getAttribute("user");
+		if(admin==null) {
+			return Response.status(400).entity("No logged users!").build();	
+		}
+		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+			AmenityDAO dao = (AmenityDAO) this.ctx.getAttribute("amenityDAO");
+			ApartmentDAO apdao = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
+			apdao.deleteAmenityfromApartment(dao.findByID(id));
+			if(dao.deleteAmenity(id)) {
+				dao.saveAmenities();
+				apdao.saveApartments();
+				return Response.status(200).entity("Amenity successfully deleted!").build();
+			}
+			return Response.status(400).entity("Selected amenity does not exist!!").build();
+		}
+		return Response.status(403).entity("Forbidden access!").build();
+	}
 }

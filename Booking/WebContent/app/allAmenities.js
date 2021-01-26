@@ -5,96 +5,20 @@ Vue.component("all-amenities",{
 			newAmenity : {
 				id:0,
 				name : ''
-			}
+			},
+			selectedAmenity : {
+				id:0,
+				name : ''
+			},
+			mode : 'BROWSE',
+			backup : []
 		}
 	},
 	
 	template : `
 	<div>
-	<div class="container flights">
-  <h1>Pretraga letovanja</h1>
-  <div class="row">
-    <form>
-      <div class="col-md-3 divider">
-        <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Polazak" id = "polazna" name="polazna" >
-        </div>
-      </div>
-      <div class="col-md-3 divider">
-        <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Odrediste" id = "odlazna" name="odlazna">
-        </div>
-      </div>
-      <div class="col-md-3 divider">
-        <div class="input-group-lg">
-          <input type="date" class="form-control" id = "ddate" name="ddate">
-        </div>
-      </div>
-      <div class="col-md-3 divider">
-        <div class="input-group-lg">
-          <input type="date" class="form-control" id = "adate" name="adate">
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="select input-lg">
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="select input-lg">
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="select input-lg">
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="select input-lg">
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <button type="input"  class="btn btn-search btn-lg">Pretraga</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <div class="container hotels">
-
 <div class="container">
-  <div class="left col-md-4 stajanja">
-
-    <div class="nesto">
-      <h3>Stajanja</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Direct</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 1</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 2+</label>
-        </div>
-      </form>
-
-      <h3>Klasa</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Economy</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Business</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Mixed</label>
-        </div>
-      </form>
-    </div>
-  </div>
   <div class="right col-md-4">
     <div class="container lista">
       <h1>Amenities</h1>
@@ -114,17 +38,14 @@ Vue.component("all-amenities",{
               <div class="room_information">
                 <div> <h2 class="room_information--heading">{{amenity.name}}</h2> </div>
                 <!-- STAR RATING-->
-                <p>Polazak:asdasdas</p>
-                <p>Dolazak: asdasdas</p>
-                <p>Broj presedanja:asdasdasd</p>
-                <p>Duzina leta: dasdasdasd</p>
+                <p>Naziv:{{amenity.name}}</p>
               </div>
               <div class="room_features">
 				<div class="col-md-5 divider">
-                <a class="room_features--book-btn">Izmeni</a> <!-- Book now -->
+               <a class="room_features--book-btn" data-toggle="modal" data-target="#editModal" v-on:click="editAmenity(amenity)" v-bind:disabled="mode!='BROWSE'">Edit</a> <!-- Book now -->
 				</div>
 				<div class="col-md-5 divider">
-				<a class="room_features--book-btn" v-on: click="delete(amenity)">Obrisi</a> <!-- Book now -->
+				<a class="room_features--book-btn" v-on:click="deleteAmenity(amenity)">Obrisi</a> <!-- Book now -->
               </div>
 				</div>
             </div>
@@ -163,6 +84,37 @@ Vue.component("all-amenities",{
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="login-container">
+          <div class="row">
+            <div class="login-form-1">
+              <h3>Editing amenity</h3>
+              <form>
+                <div class="form-group">
+                  <input v-validate="'required'" type="text" name="name" class="form-control" placeholder="Name" v-model="selectedAmenity.name"/>
+				<span class="validation-error">{{ errors.first('name') }}</span>
+                </div>
+				<div class="form-group">
+                  <input type="input" class="btnSubmit" value="Save" v-on:click="saveAmenity(selectedAmenity)" v-bind:disabled="mode=='BROWSE'"/>
+                </div>
+				<div class="form-group">
+                  <input type="input" class="btnSubmit" value="Cancel" v-on:click="cancelEditing" v-bind:disabled="mode=='BROWSE'"/>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 	`,
 	mounted(){
@@ -171,6 +123,22 @@ Vue.component("all-amenities",{
 	methods : {
 		addAmenity : function(){
 			axios.post('http://localhost:8080/Booking/rest/amenities/create',this.newAmenity).then((response)=>{console.log(response.data);this.$router.go('/allAmenities')},(error)=>{console.log(error.response.data)})
+		},
+		deleteAmenity : function(amenity){
+			axios.delete('http://localhost:8080/Booking/rest/amenities/delete/' + amenity.id).then((response)=>{console.log(response.data);this.$router.go('/allAmenities')},(error)=>{console.log(error.response.data)})
+		},
+		editAmenity : function(selectedAmenity){
+			this.selectedAmenity=selectedAmenity;
+			this.backup = [this.selectedAmenity.name];
+			this.mode='EDIT';
+		},
+		cancelEditing : function(){
+			this.selectedAmenity.name= this.backup[0];
+			this.mode='BROWSE';
+		},
+		saveAmenity : function(amenity){
+			axios.put('http://localhost:8080/Booking/rest/amenities/modify', amenity).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
+			this.mode='BROWSE';
 		}
-	}
+	},
 })
