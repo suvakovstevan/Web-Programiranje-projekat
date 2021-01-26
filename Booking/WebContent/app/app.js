@@ -1,14 +1,14 @@
 const HomePage = { template: '<home-page></home-page>' }
-const RegistrationPage = { template: '<registration-page></registration-page>' }
-const LoginPage = { template: '<login-page></login-page>' }
 const LoginPageTemp = { template: '<login-page-temp></login-page-temp>' }
 const UserProfile = { template: '<user-profile></user-profile>' }
+const allUsers = { template: '<all-users></all-users>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
 	  routes: [
 	   { path: '/', component: HomePage},
-	   { path: '/userProfile', component: UserProfile}
+	   { path: '/userProfile', component: UserProfile},
+	   { path: '/allUsers', component: allUsers}
 	  ]
 });
 

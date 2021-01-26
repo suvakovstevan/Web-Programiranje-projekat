@@ -24,7 +24,7 @@ Vue.component("home-page", {
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a routerLinkActive="active"  routerLink="/airlines">Aviokompanije <span class="sr-only" >(current)</span></a></li>
+            <li><router-link to="/allUsers"><a>Svi korisnici <span class="sr-only" >(current)</span></a></router-link></li>
             <li><a routerLinkActive="active"  routerLink="/flightList">Letovi </a></li>
             <li><a routerLinkActive="active" routerLink="/hotelList">Hoteli</a></li>
             <li><a routerLinkActive="active" routerLink="/rentAcarList">Rent a car</a></li>
@@ -34,10 +34,24 @@ Vue.component("home-page", {
             <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-user"></span></a></li>
           </ul>
           </div>
+		  <div v-else-if = "loggedUser.userRole==='ADMIN'">
+		  	<ul class="nav navbar-nav navbar-right">
+			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
+			<li><router-link to="/allUsers"><a>Svi korisnici</a></router-link></li>
+            <li><a v-on:click="logout()">Logout</a></li>
+          </ul>
+		  </div>
+		  <div v-else-if = "loggedUser.userRole==='HOST'">
+		  	<ul class="nav navbar-nav navbar-right">
+			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
+			<li><router-link to="/allHostUsers"><a>Svi korisnici</a></router-link></li>
+            <li><a v-on:click="logout()">Logout</a></li>
+          </ul>
+		  </div>
 		  <div v-else>
 		  	<ul class="nav navbar-nav navbar-right">
 			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
-            <li><a v-on:click="logout()">Logout</a></li>
+			<li><a v-on:click="logout()">Logout</a></li>
           </ul>
 		  </div>
         </div><!-- /.navbar-collapse -->
