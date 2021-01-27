@@ -98,7 +98,7 @@ Vue.component("all-apartments",{
       <h1>Apartments</h1>
 	<div class="col-md-6 divider"></div> 
 	<div class="col-md-2 divider">
-<button type="input" class="btn btn-search btn-lg" data-toggle="modal" data-target="#myModal1"  v-if="loggedUser.userRole ==='HOST'">Add</button>
+<router-link to="/addApartment"><input type="input" class="btn btn-search btn-lg" v-if="loggedUser.userRole ==='HOST'" value="Add"></input></router-link>
     </div>  
 	<div class="right">
         <div class="col-md-8">
