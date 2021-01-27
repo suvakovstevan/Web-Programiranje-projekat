@@ -1,7 +1,15 @@
 Vue.component("all-users-host",{
 	data : function (){
 		return {
-			users : {}
+			users : {},
+			loggedUser : {
+				username : '',
+				password : '',
+				firstName: '',
+				lastName : '',
+				gender : '',
+				userRole : ''
+			}
 		}
 	},
 	
@@ -32,7 +40,6 @@ Vue.component("all-users-host",{
 <div class="container">
 
   <h1>Korisnici</h1>
- <!-- <a *ngIf="authority==='admin'" routerLinkActive="active"  routerLink="/addAirline">Dodaj aviokompaniju</a>-->
 
   <div class="right">
     <div class="col-md-12">
@@ -55,7 +62,8 @@ Vue.component("all-users-host",{
 </div>
 </div>
 	`,
-	mounted(){
-		axios.get('http://localhost:8080/Booking/rest/users/allUsers').then((response) =>{this.users=response.data; console.log(this.users)},(error) => {console.log(error.response.data)})
+	mounted(){	
+		axios.get('http://localhost:8080/Booking/rest/currentUser').then((response) => {this.loggedUser = response.data; console.log(this.loggedUser)},(error)=>(console.log(error.response.data)));
+		axios.get('http://localhost:8080/Booking/rest/reservations/getGuests/' + this.loggedUser.username).then((response) =>{this.users=response.data; console.log(this.users)},(error) => {console.log(error.response.data)})
 	}
 })

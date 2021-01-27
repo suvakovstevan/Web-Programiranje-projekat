@@ -93,21 +93,24 @@ Vue.component("all-apartments",{
   </div>
   <div class="right col-md-4">
     <div class="container lista">
-      <h1>Amenities</h1>
+      <h1>Apartments</h1>
+	<div class="col-md-6 divider"></div> 
+	<div class="col-md-2 divider">
 <button type="input"  class="btn btn-search btn-lg" data-toggle="modal" data-target="#myModal1" >Add</button>
-      <div class="right">
+    </div>  
+	<div class="right">
         <div class="col-md-8">
           <div class="row">
-            <div class="room" v-for = "amenity of amenities">
+            <div class="room" v-for = "apartment of apartments">
               <!-- Room Image -->
               <div class="room_img">
                 <img src="assets/avatar.jpg">
               </div>
               <!-- Room Information -->
               <div class="room_information">
-                <div> <h2 class="room_information--heading">{{amenity.name}}</h2> </div>
+                <div> <h2 class="room_information--heading">{{apartment.type}}</h2> </div>
                 <!-- STAR RATING-->
-                <p>Polazak:asdasdas</p>
+                <p>Adresa:{{apartment.location.adress.street}}, {{apartment.location.adress.number}}, {{apartment.location.adress.city}}, {{apartment.location.adress.postalCode}}</p>
                 <p>Dolazak: asdasdas</p>
                 <p>Broj presedanja:asdasdasd</p>
                 <p>Duzina leta: dasdasdasd</p>
@@ -117,7 +120,7 @@ Vue.component("all-apartments",{
                 <a class="room_features--book-btn">Izmeni</a> <!-- Book now -->
 				</div>
 				<div class="col-md-5 divider">
-				<a class="room_features--book-btn" v-on: click="delete(amenity)">Obrisi</a> <!-- Book now -->
+				<a class="room_features--book-btn">Obrisi</a> <!-- Book now -->
               </div>
 				</div>
             </div>
@@ -139,10 +142,10 @@ Vue.component("all-apartments",{
         <div class="login-container">
           <div class="row">
             <div class="login-form-1">
-              <h3>Adding amenity</h3>
+              <h3>Adding apartment</h3>
               <form>
                 <div class="form-group">
-                  <input v-validate="'required'" type="text" name="name" class="form-control" placeholder="Name" v-model="newAmenity.name"/>
+                  <input v-validate="'required'" type="text" name="name" class="form-control" placeholder="Name"/>
 				<span class="validation-error">{{ errors.first('name') }}</span>
                 </div>
 				<div class="form-group">
@@ -159,6 +162,6 @@ Vue.component("all-apartments",{
 </div>
 	`,
 	mounted(){
-		axios.get('http://localhost:8080/Booking/rest/amenities/all').then((response) =>{this.amenities=response.data; console.log(this.amenities)},(error) => {console.log(error.response.data)})
+		axios.get('http://localhost:8080/Booking/rest/apartments/all').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
 	},
 })
