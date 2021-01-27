@@ -55,11 +55,11 @@ public class AmenityService {
 		if(admin==null) {
 			return Response.status(400).entity("No logged users!").build();	
 		}
-		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+		//if(admin.getUserRole().equals(UserRole.ADMIN)) {
 			AmenityDAO dao = (AmenityDAO) this.ctx.getAttribute("amenityDAO");
 			return Response.status(200).entity(dao.getAmenities()).build();	
-		}
-		return Response.status(403).entity("Forbidden access!").build();
+		//}
+		//return Response.status(403).entity("Forbidden access!").build();
 	}
 	
 	@POST

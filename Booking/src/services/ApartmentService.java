@@ -57,11 +57,11 @@ public class ApartmentService {
 		if(admin==null) {
 			return Response.status(400).entity("No logged users!").build();	
 		}
-		if(admin.getUserRole().equals(UserRole.ADMIN) || admin.getUserRole().equals(UserRole.HOST)) {
+		//if(admin.getUserRole().equals(UserRole.ADMIN) || admin.getUserRole().equals(UserRole.HOST)) {
 			ApartmentDAO dao = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
 			return Response.status(200).entity(dao.getApartments()).build();	
-		}
-		return Response.status(403).entity("Forbidden access!").build();
+		//}
+		//return Response.status(403).entity("Forbidden access!").build();
 	}
 	
 	@POST

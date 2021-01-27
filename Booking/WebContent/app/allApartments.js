@@ -2,13 +2,15 @@ Vue.component("all-apartments",{
 	data : function(){
 		return {
 			apartments : {},
+			loggedUser : {},
+			amenities : {}
 		}
 	},
 	
 	template : `
 	<div>
 	<div class="container flights">
-  <h1>Pretraga letovanja</h1>
+  <h1>Pretraga apartmana</h1>
   <div class="row">
     <form>
       <div class="col-md-3 divider">
@@ -96,7 +98,7 @@ Vue.component("all-apartments",{
       <h1>Apartments</h1>
 	<div class="col-md-6 divider"></div> 
 	<div class="col-md-2 divider">
-<button type="input"  class="btn btn-search btn-lg" data-toggle="modal" data-target="#myModal1" >Add</button>
+<button type="input" class="btn btn-search btn-lg" data-toggle="modal" data-target="#myModal1"  v-if="loggedUser.userRole ==='HOST'">Add</button>
     </div>  
 	<div class="right">
         <div class="col-md-8">
@@ -124,6 +126,7 @@ Vue.component("all-apartments",{
               </div>
 				</div>
             </div>
+
           </div>
         </div>
       </div>
@@ -145,8 +148,56 @@ Vue.component("all-apartments",{
               <h3>Adding apartment</h3>
               <form>
                 <div class="form-group">
-                  <input v-validate="'required'" type="text" name="name" class="form-control" placeholder="Name"/>
-				<span class="validation-error">{{ errors.first('name') }}</span>
+                  <input v-validate="'required'" type="text" name="type" class="form-control" placeholder="Type"/>
+				<span class="validation-error">{{ errors.first('type') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="roomNumber" class="form-control" placeholder="Room number"/>
+				<span class="validation-error">{{ errors.first('roomNumber') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="guestNumber" class="form-control" placeholder="Guest number"/>
+				<span class="validation-error">{{ errors.first('guestNumber') }}</span>
+                </div>
+				<div class="form-group">
+				  <label for="location">Location</label>
+                  <input v-validate="'required'" type="number" name="location" class="form-control" placeholder="Longitude"/>
+				<span class="validation-error">{{ errors.first('location') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="latitude" class="form-control" placeholder="Latitude"/>
+				<span class="validation-error">{{ errors.first('latitude') }}</span>
+                </div>
+				<div class="form-group">
+				  <label for="adress">Adress</label>
+                  <input v-validate="'required'" type="text" name="adress" class="form-control" placeholder="Street"/>
+				<span class="validation-error">{{ errors.first('adress') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="number" class="form-control" placeholder="Number"/>
+				<span class="validation-error">{{ errors.first('number') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="city" class="form-control" placeholder="City"/>
+				<span class="validation-error">{{ errors.first('city') }}</span>
+                </div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="postalCode" class="form-control" placeholder="Postal code"/>
+				<span class="validation-error">{{ errors.first('postalCode') }}</span>
+                </div>
+				<div class="form-group">
+				  <select v-validate="'required'" class="form-control" name="amenities" multiple>
+					<option v-for="amenity of amenities">{{amenity.name}}</option>
+				  </select>
+				  <span class="validation-error">{{ errors.first('amenities') }}</span>
+				</div>
+				<div class="form-group">
+                  <input v-validate="'required'" type="number" name="price" class="form-control" placeholder="Price"/>
+				<span class="validation-error">{{ errors.first('price') }}</span>
+                </div>
+				<div class="form-group">
+                  <vuejs-datepicker placeholder = "pick date"></vuejs-datepicker>
+				<span class="validation-error">{{ errors.first('price') }}</span>
                 </div>
 				<div class="form-group">
                   <input type="input" class="btnSubmit" value="Add"/>
@@ -162,6 +213,20 @@ Vue.component("all-apartments",{
 </div>
 	`,
 	mounted(){
+		this.loggedUser=JSON.parse(localStorage.loggedUser);
+		axios.get('http://localhost:8080/Booking/rest/amenities/all').then((response) =>{this.amenities=response.data; console.log(this.amenities)},(error) => {console.log(error.response.data)})
+		
+		if(this.loggedUser.userRole=='ADMIN'){
 		axios.get('http://localhost:8080/Booking/rest/apartments/all').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		}
+		if(this.loggedUser.userRole=='GUEST' || this.loggedUser.userRole=='NOT_REGISTERED'){
+		axios.get('http://localhost:8080/Booking/rest/apartments/allActiveApartments').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		}
+		if(this.loggedUser.userRole=='HOST'){
+		axios.get('http://localhost:8080/Booking/rest/apartments/host/' + this.loggedUser.username).then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		}
 	},
+	components : {
+		vuejsDatepicker
+	}
 })

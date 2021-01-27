@@ -62,8 +62,7 @@ Vue.component("all-users-host",{
 </div>
 </div>
 	`,
-	mounted(){	
-		axios.get('http://localhost:8080/Booking/rest/currentUser').then((response) => {this.loggedUser = response.data; console.log(this.loggedUser)},(error)=>(console.log(error.response.data)));
-		axios.get('http://localhost:8080/Booking/rest/reservations/getGuests/' + this.loggedUser.username).then((response) =>{this.users=response.data; console.log(this.users)},(error) => {console.log(error.response.data)})
+	mounted(){
+		axios.get('http://localhost:8080/Booking/rest/reservations/getGuests/' + JSON.parse(localStorage.loggedUser).username).then((response) =>{this.users=response.data},(error) => {console.log(error.response.data)})
 	}
 })

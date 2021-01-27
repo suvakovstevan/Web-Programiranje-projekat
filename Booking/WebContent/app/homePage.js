@@ -66,7 +66,7 @@ methods : {
 },
 mounted : function(){
 		axios.get('http://localhost:8080/Booking/rest/currentUser')
-		.then((response) => {this.loggedUser = response.data},(error)=>(console.log(error.response.data)))
+		.then((response) => {this.loggedUser = response.data; localStorage.loggedUser=JSON.stringify(response.data); console.log(JSON.parse(localStorage.loggedUser))},(error)=>(console.log(error.response.data)))
 	}
 
 });
