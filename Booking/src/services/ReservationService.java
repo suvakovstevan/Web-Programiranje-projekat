@@ -98,15 +98,15 @@ public class ReservationService {
 		if(admin==null) {
 			return Response.status(400).entity("No logged users!").build();	
 		}
-		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+		//if(admin.getUserRole().equals(UserRole.ADMIN)) {
 			ReservationDAO dao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
 			if(dao.modifyReservation(reservation)) {
 				dao.saveReservations();
 				return Response.status(200).entity("Reservation successfully modified!").build();
 			}
 			return Response.status(400).entity("Selected reservation does not exist!!").build();
-		}
-		return Response.status(403).entity("Forbidden access!").build();
+		//}
+		//return Response.status(403).entity("Forbidden access!").build();
 	}
 	
 	@GET
@@ -133,9 +133,9 @@ public class ReservationService {
 			return Response.status(400).entity("No logged user!").build();
 		}
 		
-		if(host.getUserRole()!=UserRole.HOST) {
-			return Response.status(403).entity("Forbidden access!").build();
-		}
+		//if(host.getUserRole()!=UserRole.HOST) {
+			//return Response.status(403).entity("Forbidden access!").build();
+		//}
 		ReservationDAO reservationDAO = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
 		ArrayList<Reservation> allReservations = new ArrayList<Reservation>(reservationDAO.getReservations());
 		ArrayList<Reservation> hostReservations = new ArrayList<Reservation>();
@@ -158,9 +158,9 @@ public class ReservationService {
 			return Response.status(400).entity("No logged user!").build();
 		}
 		
-		if(guest.getUserRole()!=UserRole.GUEST) {
-			return Response.status(403).entity("Forbidden access!").build();
-		}
+		//if(guest.getUserRole()!=UserRole.GUEST) {
+			//return Response.status(403).entity("Forbidden access!").build();
+		//}
 		
 		ReservationDAO dao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
 		ArrayList<Reservation> guestReservations = dao.findByUser(username);

@@ -34,6 +34,7 @@ Vue.component("home-page", {
 			<li><router-link to="/allUsers"><a>Svi korisnici</a></router-link></li>
 			<li><router-link to="/allAmenities"><a>Amenities</a></router-link></li>
 			<li><router-link to="/allApartments"><a>Apartments</a></router-link></li>
+			<li><router-link to="/allReservations"><a>Reservations</a></router-link></li>
             <li><a v-on:click="logout()">Logout</a></li>
           </ul>
 		  </div>
@@ -42,6 +43,7 @@ Vue.component("home-page", {
 			<li><router-link to="/userProfile"><a>{{loggedUser.firstName}}</a></router-link></li>
 			<li><router-link to="/allHostUsers"><a>Korisnici</a></router-link></li>
 			<li><router-link to="/allApartments"><a>Apartmani</a></router-link></li>
+			<li><router-link to="/allReservations"><a>Reservations</a></router-link></li>
             <li><a v-on:click="logout()">Logout</a></li>
           </ul>
 		  </div>

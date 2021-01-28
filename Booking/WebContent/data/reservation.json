@@ -46,6 +46,6 @@
 		"gender"  : "MALE",
 		"userRole"  :"GUEST"
 },
-  "status" : "COMPLETED",
+  "status" : "CREATED",
   "id" : "1"
 }]

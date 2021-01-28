@@ -1,7 +1,7 @@
-Vue.component("all-apartments",{
+Vue.component("all-reservations",{
 	data : function(){
 		return {
-			apartments : {},
+			reservations : {},
 			loggedUser : {},
 			amenities : {},
 			mode : 'BROWSE'
@@ -11,7 +11,7 @@ Vue.component("all-apartments",{
 	template : `
 	<div>
 	<div class="container flights">
-  <h1>Pretraga apartmana</h1>
+  <h1>Pretraga rezervacija</h1>
   <div class="row">
     <form>
       <div class="col-md-3 divider">
@@ -104,32 +104,31 @@ Vue.component("all-apartments",{
 	<div class="right">
         <div class="col-md-8">
           <div class="row">
-            <div class="room" v-for = "apartment of apartments">
+            <div class="room" v-for = "reservation of reservations">
               <!-- Room Image -->
               <div class="room_img">
                 <img src="assets/avatar.jpg">
               </div>
               <!-- Room Information -->
               <div class="room_information">
-                <div> <h2 class="room_information--heading">{{apartment.type}}</h2> </div>
+                <div> <h2 class="room_information--heading">{{reservation.id}}</h2> </div>
                 <!-- STAR RATING-->
-                <p>Adresa:{{apartment.location.adress.street}}, {{apartment.location.adress.number}}, {{apartment.location.adress.city}}, {{apartment.location.adress.postalCode}}</p>
                 <p>Dolazak: asdasdas</p>
                 <p>Broj presedanja:asdasdasd</p>
                 <p>Duzina leta: dasdasdasd</p>
               </div>
- 			  <div class="room_features" v-if="loggedUser.userRole ==='GUEST'">
+              <div class="room_features" v-if = "loggedUser.userRole ==='HOST'">
 				<div class="col-md-5 divider">
-                <router-link to="/addReservation"><a class="room_features--book-btn" v-on:click="editApartment(apartment)">Reservation</a></router-link> <!-- Book now -->
-				</div>
-				</div>
-              <div class="room_features" v-else>
-				<div class="col-md-5 divider">
-                <router-link to="/editApartment"><a class="room_features--book-btn" v-if="loggedUser.userRole ==='ADMIN' || loggedUser.userRole ==='HOST'" v-on:click="editApartment(apartment)">Izmeni</a></router-link> <!-- Book now -->
+                <a class="room_features--book-btn" v-if="reservation.status==='CREATED'" v-on:click="acceptReservation(reservation)">Accept</a><!-- Book now -->
 				</div>
 				<div class="col-md-5 divider">
-				<a class="room_features--book-btn" v-if="loggedUser.userRole ==='ADMIN' || loggedUser.userRole ==='HOST'" v-on:click="deleteApartment(apartment)">Obrisi</a> <!-- Book now -->
+				<a class="room_features--book-btn" v-if="reservation.status==='CREATED' || reservation.status==='ACCEPTED'" v-on:click="denyReservation(reservation)">Deny</a> <!-- Book now -->
               </div>
+				</div>
+				<div class="room_features" v-if = "loggedUser.userRole ==='GUEST'">
+				<div class="col-md-5 divider">
+                <a class="room_features--book-btn" v-if="reservation.status==='CREATED' || reservation.status==='ACCEPTED'" v-on:click="cancelReservation(reservation)">Cancel</a><!-- Book now -->
+				</div>
 				</div>
             </div>
 
@@ -147,24 +146,30 @@ Vue.component("all-apartments",{
 		axios.get('http://localhost:8080/Booking/rest/amenities/all').then((response) =>{this.amenities=response.data; console.log(this.amenities)},(error) => {console.log(error.response.data)})
 		
 		if(this.loggedUser.userRole=='ADMIN'){
-		axios.get('http://localhost:8080/Booking/rest/apartments/all').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		axios.get('http://localhost:8080/Booking/rest/reservations/all').then((response) =>{this.reservations=response.data; console.log(this.reservations)},(error) => {console.log(error.response.data)})
 		}
-		if(this.loggedUser.userRole=='GUEST' || this.loggedUser.userRole=='NOT_REGISTERED'){
-		axios.get('http://localhost:8080/Booking/rest/apartments/allActiveApartments').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		if(this.loggedUser.userRole=='GUEST'){
+		axios.get('http://localhost:8080/Booking/rest/reservations/getGuest/' + this.loggedUser.username).then((response) =>{this.reservations=response.data; console.log(this.reservations)},(error) => {console.log(error.response.data)})
 		}
 		if(this.loggedUser.userRole=='HOST'){
-		axios.get('http://localhost:8080/Booking/rest/apartments/host/' + this.loggedUser.username).then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})
+		axios.get('http://localhost:8080/Booking/rest/reservations/getHost/' + this.loggedUser.username).then((response) =>{this.reservations=response.data; console.log(this.reservations)},(error) => {console.log(error.response.data)})
 		}
 	},
 	components : {
 		vuejsDatepicker
 	},
 	methods : {
-		deleteApartment : function(apartment){
-			axios.delete('http://localhost:8080/Booking/rest/apartments/delete/' + apartment.id).then((response)=>{console.log(response.data);this.$router.go('/allApartments')},(error)=>{console.log(error.response.data)})
+		acceptReservation : function(reservation){
+			reservation.status='ACCEPTED';
+		axios.put('http://localhost:8080/Booking/rest/reservations/modify',reservation).then((response) =>{console.log(response.data)},(error) => {console.log(error.response.data)})
 		},
-		editApartment : function(apartment){
-			localStorage.currentApartment=JSON.stringify(apartment)
+		denyReservation : function(reservation){
+			reservation.status='DENIED';
+		axios.put('http://localhost:8080/Booking/rest/reservations/modify',reservation).then((response) =>{console.log(response.data)},(error) => {console.log(error.response.data)})	
+		},
+		cancelReservation : function(reservation){
+			reservation.status='CANCELED';
+		axios.put('http://localhost:8080/Booking/rest/reservations/modify',reservation).then((response) =>{console.log(response.data)},(error) => {console.log(error.response.data)})	
 		}
 	}
 })
