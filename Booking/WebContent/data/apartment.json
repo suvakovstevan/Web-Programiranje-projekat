@@ -55,7 +55,10 @@
     "gender" : "MALE",
     "userRole" : "HOST"
   },
-  "reservationDates" : [ ],
+  "reservationDates" : [{
+  	"date" : "1610492400000",
+  	"state" : true
+  } ],
   "pricePerNight" : "0.0",
   "checkInTime" : "1588636800001",
   "checkOutTime" : "158863680000",

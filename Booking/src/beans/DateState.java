@@ -7,6 +7,16 @@ public class DateState {
 	private Date date;
 	private boolean state;
 	
+	public DateState() {
+		
+	}
+	
+	public DateState(Date date, boolean state) {
+		super();
+		this.date = date;
+		this.state = state;
+	}
+	
 	public Date getDate() {
 		return date;
 	}

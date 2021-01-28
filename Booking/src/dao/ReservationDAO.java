@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -105,7 +106,7 @@ public class ReservationDAO {
 		// TODO Auto-generated method stub
 		for(DateState ds : apartment.getReservationDates()) {
 			if(ds.getDate().equals(reservation.getStartDate()) || 
-					ds.getDate().equals((reservation.getStartDate().getTime() + (reservation.getNightNumber() *86400*1000)))) {
+					ds.getDate().equals(new Date(reservation.getStartDate().getTime() + (reservation.getNightNumber() *86400*1000)))) {
 				return false;
 			}
 		}
