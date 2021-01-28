@@ -6,6 +6,7 @@ const allHostUsers = { template: '<all-users-host></all-users-host>' }
 const allAmenities = { template: '<all-amenities></all-amenities>' }
 const allApartments = { template: '<all-apartments></all-apartments>' }
 const addApartment = { template: '<add-apartment></add-apartment>' }
+const editApartment = { template: '<edit-apartment></edit-apartment>' }
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -16,7 +17,8 @@ const router = new VueRouter({
 	   { path: '/allHostUsers', component: allHostUsers},
 	   { path: '/allAmenities', component: allAmenities},
 	   { path: '/allApartments', component: allApartments},
-	   { path: '/addApartment', component: addApartment}
+	   { path: '/addApartment', component: addApartment},
+	   { path: '/editApartment', component: editApartment}
 	  ]
 });
 
