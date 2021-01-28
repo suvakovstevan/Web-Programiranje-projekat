@@ -16,9 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import beans.Apartment;
-import beans.DateState;
 import beans.Reservation;
 import beans.User;
 import beans.UserRole;
@@ -86,16 +84,6 @@ public class ReservationService {
 				return Response.status(400).entity("Apartment reserverd for that date!").build();
 			}
 			dao.putReservation(reservation);
-			//ArrayList<Reservation> temp = new ArrayList<Reservation>(apartment.getReservations());
-			//temp.add(reservation);
-			//ArrayList<DateState> temp2 = new ArrayList<DateState>(apartment.getReservationDates());
-			//for(int i=0; i<reservation.getNightNumber(); i++) {
-				//temp2.add(new DateState(new Date(reservation.getStartDate().getTime()+i*86400*1000),true));
-			//}
-			//apartment.setReservations(temp);
-			//apartment.setReservationDates(temp2);
-			//apartmentDAO.modifyAapartment(apartment);
-			//apartmentDAO.saveApartments();
 			dao.saveReservations();
 			return Response.status(200).entity("Reservation successfully created!").build();
 		}

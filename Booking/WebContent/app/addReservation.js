@@ -28,7 +28,7 @@ Vue.component("add-reservation",{
     				gender : '',
     				userRole : ''
   						},
-  				reservationDates : [{}],
+  				reservationDates : [],
   				pricePerNight : 0,
   				checkInTime : 0,
   				checkOutTime : 0,
@@ -39,12 +39,14 @@ Vue.component("add-reservation",{
 				}],
   				reservations : [ ],
   				images : [ ]},
-			listaDatuma : [
+			tempElement : 
 				{
 					date : 0,
 					status : false
+				},
+				listaDatuma : 
+				{
 				}
-			]
 		    }
 	},
 	template:`
@@ -69,32 +71,22 @@ Vue.component("add-reservation",{
 	
 	},
 	methods : {
-		izracunajdatum : function(){
-			this.finalDate=this.selectedDate.getTime()
-			this.newDate=new Date(parseInt(this.selectedDate.getTime() + (this.broj*86400*1000)))
-		},
 		saveReservation : function(){
-			var i;
-			var j;
+			var tempElement = {date : new Date(), status : false};
 			this.reservation.sumPrice= this.reservation.nightNumber*this.apartment.pricePerNight;
 			this.reservation.message="poeuka glupa";
 			this.reservation.guest=this.loggedUser;
 			this.reservation.status='CREATED';
 			
 			for(i=0; i<this.reservation.nightNumber; i++){
-				this.listaDatuma[i]=new Date(parseInt(this.reservation.startDate.getTime() + (i*86400*1000)))
-				console.log(this.listaDatuma[i])
+				tempElement.date = new Date(parseInt(this.reservation.startDate.getTime() + (i*86400*1000) + 3600000))
+				tempElement.status = true;
+				this.apartment.reservationDates.push((JSON.parse(JSON.stringify(tempElement))))
 			}
-			
-			for(j=0; j<this.listaDatuma.length; j++){
-				var k= this.apartment.reservationDates.length;
-				this.apartment.reservationDates[k]= this.listaDatuma[j];
-				k++;
-			}
+			//this.apartment.reservations.push(this.reservation);
 			this.reservation.resApartment=this.apartment;
-			
 			console.log(this.reservation)
-			//axios.post('http://localhost:8080/Booking/rest/reservations/create', this.reservation).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
+			axios.post('http://localhost:8080/Booking/rest/reservations/create',this.reservation).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
 		}
 	},
 	mounted(){
