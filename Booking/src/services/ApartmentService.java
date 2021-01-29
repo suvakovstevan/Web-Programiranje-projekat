@@ -89,15 +89,15 @@ public class ApartmentService {
 		if(admin==null) {
 			return Response.status(400).entity("No logged users!").build();	
 		}
-		if(admin.getUserRole().equals(UserRole.ADMIN)) {
+		//if(admin.getUserRole().equals(UserRole.ADMIN)) {
 			ApartmentDAO dao = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
 			if(dao.modifyAapartment(apartment)) {
 				dao.saveApartments();
 				return Response.status(200).entity("Apartment successfully modified!").build();
 			}
 			return Response.status(400).entity("Selected apartment does not exist!!").build();
-		}
-		return Response.status(403).entity("Forbidden access!").build();
+		//}
+		//return Response.status(403).entity("Forbidden access!").build();
 	}
 	
 	@DELETE

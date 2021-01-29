@@ -1,39 +1,5 @@
 [{
-  "resApartment" : {
-  "id" : "1",
-  "type" : "FULL",
-  "roomNumber" : "3",
-  "guestNumber" : "4",
-  "location" : {
-    "longitude" : "12.4579",
-    "latitude" : "14.1246",
-    "adress" : {
-      "street" : "Ulica",
-      "number" : "1",
-      "city" : "Grad",
-      "postalCode" : "1100"
-    }
-  },
-  "host" : {
-    "username" : "host",
-    "password" : "host",
-    "firstName" : "Host",
-    "lastName" : "Host",
-    "gender" : "MALE",
-    "userRole" : "HOST"
-  },
-  "reservationDates" : [ ],
-  "pricePerNight" : "0.0",
-  "checkInTime" : "1588636800001",
-  "checkOutTime" : "1588636800001",
-  "status" : false,
-  "amenidies" : [{
-	"id" : "1",
-	"name" : "klima"
-}],
-  "reservations" : [ ],
-  "images" : [ ]
-},
+  "resApartment" : "1",
   "startDate" : "1588636800001",
   "nightNumber" : "3",
   "sumPrice" : "700.0",

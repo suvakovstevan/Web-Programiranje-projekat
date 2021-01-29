@@ -5,7 +5,7 @@ import java.util.Date;
 public class Reservation {
 
 	private Long id;
-	private Apartment resApartment;
+	private Long resApartment;
 	private Date startDate;
 	private Integer nightNumber = 1;
 	private Double sumPrice;
@@ -19,10 +19,10 @@ public class Reservation {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Apartment getResApartment() {
+	public Long getResApartment() {
 		return resApartment;
 	}
-	public void setResApartment(Apartment resApartment) {
+	public void setResApartment(Long resApartment) {
 		this.resApartment = resApartment;
 	}
 	public Date getStartDate() {

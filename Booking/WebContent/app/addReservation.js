@@ -39,14 +39,8 @@ Vue.component("add-reservation",{
 				}],
   				reservations : [ ],
   				images : [ ]},
-			tempElement : 
-				{
-					date : 0,
-					status : false
-				},
-				listaDatuma : 
-				{
-				}
+		flag : false,
+		temp :[]
 		    }
 	},
 	template:`
@@ -71,27 +65,39 @@ Vue.component("add-reservation",{
 	
 	},
 	methods : {
+		
 		saveReservation : function(){
 			var tempElement = {date : new Date(), status : false};
 			this.reservation.sumPrice= this.reservation.nightNumber*this.apartment.pricePerNight;
 			this.reservation.message="poeuka glupa";
 			this.reservation.guest=this.loggedUser;
 			this.reservation.status='CREATED';
+			this.reservation.startDate=new Date(parseInt(this.reservation.startDate.getTime() + 3600000));
 			
 			for(i=0; i<this.reservation.nightNumber; i++){
 				tempElement.date = new Date(parseInt(this.reservation.startDate.getTime() + (i*86400*1000) + 3600000))
 				tempElement.status = true;
 				this.apartment.reservationDates.push((JSON.parse(JSON.stringify(tempElement))))
 			}
-			//this.apartment.reservations.push(this.reservation);
-			this.reservation.resApartment=this.apartment;
-			console.log(this.reservation)
-			axios.post('http://localhost:8080/Booking/rest/reservations/create',this.reservation).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
+			this.reservation.resApartment=this.apartment.id;
+			this.temp.push((JSON.parse(JSON.stringify(this.apartment))))
+			this.temp.push((JSON.parse(JSON.stringify(this.reservation))))
+			console.log(this.temp)
+				axios.post('http://localhost:8080/Booking/rest/reservations/create', this.temp).then(response => {this.flag=response.data}).catch(err => {this.flag=err.response.data}) 
+			
+			if(this.flag==true){
+				this.apartment.reservations.push(this.reservation)
+				axios.put('http://localhost:8080/Booking/rest/apartments/modify', this.apartment).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
+			}
+			
+			console.log('vrednost flega')
+			console.log(this.flag)
 		}
 	},
 	mounted(){
 		this.loggedUser=JSON.parse(localStorage.loggedUser)
 		this.apartment=JSON.parse(localStorage.currentApartment);
 		console.log(this.apartment)
+		console.log(this.flag)
 	}
 })

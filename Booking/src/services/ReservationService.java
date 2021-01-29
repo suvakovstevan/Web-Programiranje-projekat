@@ -1,8 +1,6 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -73,22 +71,52 @@ public class ReservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createReservation(Reservation reservation, @Context HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
+		
 		if(user==null) {
 			return Response.status(400).entity("No logged users!").build();	
 		}
 		if(user.getUserRole().equals(UserRole.GUEST)) {
 			ReservationDAO dao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
 			ApartmentDAO apartmentDAO = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
-			Apartment apartment = apartmentDAO.findByID(reservation.getResApartment().getId());
+			Apartment apartment = apartmentDAO.findByID(reservation.getResApartment());
 			if(!dao.checkIfAvaliable(reservation, apartment)) {
-				return Response.status(400).entity("Apartment reserverd for that date!").build();
+				return Response.status(400).entity(false).build();
 			}
 			dao.putReservation(reservation);
 			dao.saveReservations();
-			return Response.status(200).entity("Reservation successfully created!").build();
+			return Response.status(200).entity(true).build();
 		}
 		return Response.status(403).entity("Forbidden access!").build();
 	}
+	
+	/*@POST
+	@Path("/create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createReservation(ArrayList<Object> array, @Context HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		Apartment apartmenttemp = (Apartment) array.get(0).
+		Reservation reservationtemp = (Reservation) array.get(1);
+		ArrayList<Reservation> reservationList = new ArrayList<Reservation>(apartmenttemp.getReservations());
+		if(user==null) {
+			return Response.status(400).entity("No logged users!").build();	
+		}
+		if(user.getUserRole().equals(UserRole.GUEST)) {
+			ReservationDAO dao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
+			ApartmentDAO apartmentDAO = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
+			//Apartment apartment = apartmentDAO.findByID(reservation.getResApartment());
+			if(!dao.checkIfAvaliable(reservationtemp, apartmenttemp)) {
+				return Response.status(400).entity("Invalid date!").build();
+			}
+			dao.putReservation(reservationtemp);
+			reservationList.add(reservationtemp);
+			apartmenttemp.setReservations(reservationList);
+			dao.saveReservations();
+			apartmentDAO.modifyAapartment(apartmenttemp);
+			apartmentDAO.saveApartments();
+			return Response.status(200).entity("Reservation successfull!").build();
+		}
+		return Response.status(403).entity("Forbidden access!").build();
+	}*/
 	
 	@PUT
 	@Path("modify")
@@ -127,6 +155,7 @@ public class ReservationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHostReservations(@PathParam("username") String username, @Context HttpServletRequest request) {
 		UserDAO userDAO = (UserDAO) this.ctx.getAttribute("userDAO");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
 		User host = userDAO.findByUsername(username);
 		
 		if(host == null) {
@@ -140,7 +169,9 @@ public class ReservationService {
 		ArrayList<Reservation> allReservations = new ArrayList<Reservation>(reservationDAO.getReservations());
 		ArrayList<Reservation> hostReservations = new ArrayList<Reservation>();
 		for(Reservation r: allReservations) {
-			if(r.getResApartment().getHost().getUsername().equals(host.getUsername())) {
+			Long idApartmana = r.getResApartment();
+			Apartment apartment = apartmentDAO.findByID(idApartmana);
+			if(apartment.getHost().getUsername().equals(host.getUsername())) {
 				hostReservations.add(r);
 			}
 		}
@@ -173,6 +204,9 @@ public class ReservationService {
 	public Response getGuestsFromReservations(@PathParam("hostUsername") String username, @Context HttpServletRequest request) {
 		UserDAO userDAO = (UserDAO) this.ctx.getAttribute("userDAO");
 		ReservationDAO dao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
+		ApartmentDAO apdao = (ApartmentDAO) this.ctx.getAttribute("apartmentDAO");
+		ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
+		reservationList = (ArrayList<Reservation>) dao.getReservations();
 		User host = userDAO.findByUsername(username);
 		if(host == null) {
 			return Response.status(400).entity("No logged user!").build();
@@ -181,15 +215,17 @@ public class ReservationService {
 		if(host.getUserRole()!=UserRole.HOST) {
 			return Response.status(403).entity("Forbidden access!").build();
 		}
-		return Response.status(200).entity(dao.getHostsReservationUsernames(host)).build();
-	}
-	
-	@GET
-	@Path("/getDates")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDates(Apartment apartment, @Context HttpServletRequest request) {
-			ReservationDAO resdao = (ReservationDAO) this.ctx.getAttribute("reservationDAO");
-			
-		return null;
+		
+		Long apartmentID = (long) 0;
+		Apartment apartment = new Apartment();
+		ArrayList<User> usersList = new ArrayList<User>();
+		for(Reservation r: reservationList) {
+			apartmentID = r.getResApartment();
+			apartment = apdao.findByID(apartmentID);
+			if(apartment.getHost().getUsername().equals(username)) {
+				usersList.add(r.getGuest());
+			}
+		}
+		return Response.status(200).entity(usersList).build();
 	}
 }

@@ -105,8 +105,11 @@ public class ReservationDAO {
 	public boolean checkIfAvaliable(Reservation reservation, Apartment apartment) {
 		// TODO Auto-generated method stub
 		for(DateState ds : apartment.getReservationDates()) {
-			if(ds.getDate().equals(reservation.getStartDate()) || 
-					ds.getDate().equals(new Date(reservation.getStartDate().getTime() + (reservation.getNightNumber() *86400*1000)))) {
+			System.out.println("//////////////////////////////////");
+			System.out.println("datumi iz reservation datesa(ms):" +ds.getDate().getTime() + "datumi iz reservation datesa(time):" + ds.getDate());
+			System.out.println("datum iz rezervacije(ms)" + reservation.getStartDate().getTime() + "datum iz rezervacije(time)" + reservation.getStartDate());
+			System.out.println("/////////////////////////////////");
+			if((ds.getDate().getTime() == reservation.getStartDate().getTime() + 3600000) || (ds.getDate().getTime() == (reservation.getStartDate().getTime() + (reservation.getNightNumber() *86400*1000)+3600000))) {
 				return false;
 			}
 		}
@@ -124,15 +127,16 @@ public class ReservationDAO {
 		return reservationList;
 	}
 	
-	public ArrayList<User> getHostsReservationUsernames(User user) {
+	/*public ArrayList<User> getHostsReservationUsernames(User user) {
 		ArrayList<User> usersList = new ArrayList<User>();
 		for(Reservation r : this.reservations) {
+			Long idApartmana = r.getResApartment();
 			if(r.getResApartment().getHost().getUsername().equals(user.getUsername())) {
 				usersList.add(r.getGuest());
 			}
 		}
 		return usersList;
-	}
+	}*/
 
 	public List<Reservation> getReservations() {
 		return reservations;
