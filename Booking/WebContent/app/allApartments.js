@@ -66,33 +66,7 @@ Vue.component("all-apartments",{
 <div class="container">
   <div class="left col-md-4 stajanja">
 
-    <div class="nesto">
-      <h3>Stajanja</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Direct</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 1</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 2+</label>
-        </div>
-      </form>
 
-      <h3>Klasa</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Economy</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Business</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Mixed</label>
-        </div>
-      </form>
-    </div>
   </div>
   <div class="right col-md-4">
     <div class="container lista">
@@ -114,9 +88,10 @@ Vue.component("all-apartments",{
                 <div> <h2 class="room_information--heading">{{apartment.type}}</h2> </div>
                 <!-- STAR RATING-->
                 <p>Adresa:{{apartment.location.adress.street}}, {{apartment.location.adress.number}}, {{apartment.location.adress.city}}, {{apartment.location.adress.postalCode}}</p>
-                <p>Dolazak: asdasdas</p>
-                <p>Broj presedanja:asdasdasd</p>
-                <p>Duzina leta: dasdasdasd</p>
+                <p>Cena: {{apartment.pricePerNight}}</p>
+                <div v-for="amenity of amenities">
+					<p>{{amenity.name}}</p>
+				</div>
               </div>
  			  <div class="room_features" v-if="loggedUser.userRole ==='GUEST'">
 				<div class="col-md-5 divider">
@@ -145,6 +120,7 @@ Vue.component("all-apartments",{
 	mounted(){
 		this.loggedUser=JSON.parse(localStorage.loggedUser);
 		axios.get('http://localhost:8080/Booking/rest/amenities/all').then((response) =>{this.amenities=response.data; console.log(this.amenities)},(error) => {console.log(error.response.data)})
+		
 		
 		if(this.loggedUser.userRole=='ADMIN'){
 		axios.get('http://localhost:8080/Booking/rest/apartments/all').then((response) =>{this.apartments=response.data; console.log(this.apartments)},(error) => {console.log(error.response.data)})

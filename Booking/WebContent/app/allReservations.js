@@ -16,12 +16,12 @@ Vue.component("all-reservations",{
     <form>
       <div class="col-md-3 divider">
         <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Polazak" id = "polazna" name="polazna" >
+          <input type="text" class="form-control" placeholder="Tip" id = "polazna" name="polazna" >
         </div>
       </div>
       <div class="col-md-3 divider">
         <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Odrediste" id = "odlazna" name="odlazna">
+          <input type="text" class="form-control" placeholder="Host" id = "odlazna" name="odlazna">
         </div>
       </div>
       <div class="col-md-3 divider">
@@ -66,37 +66,10 @@ Vue.component("all-reservations",{
 <div class="container">
   <div class="left col-md-4 stajanja">
 
-    <div class="nesto">
-      <h3>Stajanja</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Direct</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 1</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> 2+</label>
-        </div>
-      </form>
-
-      <h3>Klasa</h3>
-      <form>
-        <div class="checkbox">
-          <label><input type="checkbox"> Economy</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Business</label>
-        </div>
-        <div class="checkbox">
-          <label><input type="checkbox"> Mixed</label>
-        </div>
-      </form>
-    </div>
   </div>
   <div class="right col-md-4">
     <div class="container lista">
-      <h1>Apartments</h1>
+      <h1>Reservations</h1>
 	<div class="col-md-6 divider"></div> 
 	<div class="col-md-2 divider">
 <router-link to="/addApartment"><input type="input" class="btn btn-search btn-lg" v-if="loggedUser.userRole ==='HOST'" value="Add"></input></router-link>

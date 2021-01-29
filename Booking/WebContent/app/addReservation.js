@@ -65,7 +65,16 @@ Vue.component("add-reservation",{
 	
 	},
 	methods : {
-		
+		funkcija : function(flag){
+			
+				console.log('da li je uslo majku mu!')
+				console.log(flag)
+				if(flag==true){
+				this.apartment.reservations.push(this.reservation)
+				axios.put('http://localhost:8080/Booking/rest/apartments/modify', this.apartment).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
+			}
+		},
+	
 		saveReservation : function(){
 			var tempElement = {date : new Date(), status : false};
 			this.reservation.sumPrice= this.reservation.nightNumber*this.apartment.pricePerNight;
@@ -79,19 +88,11 @@ Vue.component("add-reservation",{
 				tempElement.status = true;
 				this.apartment.reservationDates.push((JSON.parse(JSON.stringify(tempElement))))
 			}
+			
+		
 			this.reservation.resApartment=this.apartment.id;
-			this.temp.push((JSON.parse(JSON.stringify(this.apartment))))
-			this.temp.push((JSON.parse(JSON.stringify(this.reservation))))
-			console.log(this.temp)
-				axios.post('http://localhost:8080/Booking/rest/reservations/create', this.temp).then(response => {this.flag=response.data}).catch(err => {this.flag=err.response.data}) 
-			
-			if(this.flag==true){
-				this.apartment.reservations.push(this.reservation)
-				axios.put('http://localhost:8080/Booking/rest/apartments/modify', this.apartment).then((response)=>{console.log(response.data)},(error)=>{console.log(error.response.data)})
-			}
-			
-			console.log('vrednost flega')
-			console.log(this.flag)
+			axios.post('http://localhost:8080/Booking/rest/reservations/create', this.reservation).then(response => {this.flag=response.data; console.log(this.flag)}).catch(err => {this.flag=err.response.data})
+				setTimeout(()=>{this.funkcija(this.flag)},1000)
 		}
 	},
 	mounted(){

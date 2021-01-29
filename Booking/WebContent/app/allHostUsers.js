@@ -22,12 +22,12 @@ Vue.component("all-users-host",{
     <form>
       <div class="col-md-5 divider">
         <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Polazna destinacija" id = "polazna" name="polazna">
+          <input type="text" class="form-control" placeholder="Name" id = "polazna" name="polazna">
         </div>
       </div>
       <div class="col-md-5 divider">
         <div class="input-group-lg">
-          <input type="text" class="form-control" placeholder="Odredisna destinacija" id = "odredisna" name="odredisna">
+          <input type="text" class="form-control" placeholder="Username" id = "odredisna" name="odredisna">
         </div>
       </div>
       <div class="col-md-2 divider">
